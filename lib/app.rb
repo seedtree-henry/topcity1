@@ -20,25 +20,24 @@ products_hash["items"].each do |toy|
   # Print the name of the toy
   puts toy["title"]
   # Print the retail price of the toy
-  puts toy["full-price"]
+  puts "Retail price: $" +  toy["full-price"].to_s
   # Calculate and print the total number of purchases
-  puts toy["purchases"].length
+  puts "Total purchases: " + toy["purchases"].length.to_s
   # Calculate and print the total amount of sales
-  total_toys = 0.0
-  total_shipping = 0.0
   total_sales = 0.0
   toy["purchases"].each do |p|
-    total_toys =  total_toys + p["price"] 
-    total_shipping =  total_shipping + p["shipping"]
+    total_sales =  total_sales + p["price"]
   end
-  total_sales = total_toys + total_shipping
-  puts total_sales
+  puts "Total sales: $" +  total_sales.to_s
   # Calculate and print the average price the toy sold for
-  average_toy = total_toys / 2
-  puts average_toy
+  average_sales = total_sales / 2
+  puts "Average price: $" +  average_sales.round(2).to_s
   # Calculate and print the average discount (% or $) based off the average sales price
-  discount_rate = (toy["full-price"].to_f-average_toy)/average_toy*100 
+  average_discount = toy["full-price"].to_f - average_sales
+  puts "Average discount: $" + average_discount.round(2).to_s 
+  discount_rate = (toy["full-price"].to_f-average_sales)/toy["full-price"].to_f*100 
   puts discount_rate.round(2).to_s  + "%"
+  puts " "
 end
 
 puts " _                         _     "
@@ -62,28 +61,25 @@ brands.each do |b|
   total_stock = 0
   total_price = 0.0
   average_price = 0.0
+  total_sales = 0.0
+  n = 0
   products_hash["items"].each do |toy|
     if toy["brand"] == b
+      n = n + 1
       total_stock = total_stock + toy["stock"]
       total_price = total_price + toy["full-price"].to_f
+      toy["purchases"].each do |p|
+        total_sales = total_sales + p["price"]
+      end
     end  
   end
   # Count and print the number of the brand's toys we stock
-  puts total_stock
+  puts "Number of stocks: " + total_stock.to_s
   # Calculate and print the average price of the brand's toys
-  average_price = total_price / 2
-  puts average_price.round(2)
+  average_price = total_price / n
+  puts "Average price: $" +  average_price.round(2).to_s
+  # Calculate and print the total revenue of all the brand's toy sales combined
+  puts "Total sales: " + total_sales.round(2).to_s
+  puts " "
 end
 
-  # Calculate and print the total revenue of all the brand's toy sales combined
-gross_sales = 0.0
-gross_toys = 0.0
-gross_shipping = 0.0
-products_hash["items"].each do |toy|
-  toy["purchases"].each do |p|
-    gross_toys = gross_toys + p["price"]
-    gross_shipping = gross_shipping + p["shipping"]
-  end
-end
-gross_sales = gross_toys + gross_shipping
-puts "gross sales: " +  gross_sales.to_s
